@@ -87,10 +87,12 @@ error:
 }
 
 
-void connection_free(connection_t* connection) {
+void connection_free(connection_t** rconnection) {
+    connection_t* connection = *rconnection;
     idevice_free(connection->device);
     lockdownd_client_free(connection->lockdown_client);
     lockdownd_service_descriptor_free(connection->service_descriptor);
     afc_client_free(connection->client);
     free(connection);
+    *rconnection = NULL;
 }

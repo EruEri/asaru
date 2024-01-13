@@ -15,40 +15,64 @@
 //                                                                                            //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "../include/asaru_util.h"
-#include <string.h>
+
+#include "../include/asaru_path.h"
 #include <stdbool.h>
-#include <stdio.h>
+#include <stddef.h>
 #include <stdlib.h>
+#include "../include/asaru_util.h"
 
+static void asaru_path_realloc(asaru_path_t* path) {
+    size_t new_capacity = path->capacity * 2;
+    const char** components = ralloc(path->components, sizeof(const char*) * new_capacity);
+    path->components = components;
+    path->capacity = new_capacity;
+}
 
-void* alloc(size_t size) {
-    void* c = malloc(size);
-    if (c == NULL) {
-        perror("malloc");
-        exit(2);
+static bool asaru_path_need_realloc(asaru_path_t* path) {
+    return path->count >= path->capacity;
+}
+
+asaru_path_t* asaru_path_create() {
+    size_t capacity = 1;
+    size_t count = 0;
+    const char** components = alloc(sizeof(const char*));
+    asaru_path_t* path = alloc(sizeof(asaru_path_t));
+    path->components = components;
+    path->count = count;
+    path->capacity = capacity;
+    return path;
+}
+
+void asaru_path_free(asaru_path_t** rpath) {
+    asaru_path_t* p = *rpath;
+    for (size_t i = 0; i < p->count; i++) {
+        free((void*) p->components[i]);
     }
-
-    return c;
+    free(p->components);
+    free(p);
+    *rpath = NULL;
 }
 
-void* ralloc(void* ptr, size_t size) {
-    void* new = realloc(ptr, size);
-    if (new == NULL) {
-        perror("realloc");
-        exit(2);
+void asaru_path_pop(asaru_path_t* path) {
+    if (path->count == 0) return;
+    free((void*) path->components[path->count]);
+    path->count -= 1;
+}
+
+void asaru_path_push(asaru_path_t * path, const char* c) {
+    if (streq(c, ".")) {
+        return;
+    } 
+    if (streq(c, ".."))  {
+        asaru_path_pop(path);
+        return;
     }
-
-    return new;
-}
-
-bool streq(const char * lhs, const char * rhs) {
-    return strcmp(lhs, rhs) == 0;
-}
-
-char* strclone(const char* src) {
-    size_t length = strlen(src);
-    char* cp = alloc(length + 1);
-    strncpy(cp, src, length + 1);
-    return cp;
+        
+    if (asaru_path_need_realloc(path)){
+        asaru_path_realloc(path);
+    }
+    char* copy = strclone(c); 
+    path->components[path->count] = copy;
+    path->count += 1;
 }

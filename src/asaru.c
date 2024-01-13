@@ -20,6 +20,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+int repl(connection_t* connection) {
+    return 0;
+}
+
 int main(int argc, const char ** argv) {
     connection_error_t e;
     connection_t* connection = connection_create(&e);
@@ -28,5 +33,7 @@ int main(int argc, const char ** argv) {
         exit(1);
     }
 
-    connection_free(connection);
+    repl(connection);
+
+    connection_free(&connection);
 }

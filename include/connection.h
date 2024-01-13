@@ -41,6 +41,6 @@ typedef struct{
 } connection_t;
 
 connection_t* connection_create(connection_error_t* e);
-void connection_free(connection_t*);
+void connection_free(connection_t**);
 
 #endif

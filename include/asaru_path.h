@@ -15,40 +15,26 @@
 //                                                                                            //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "../include/asaru_util.h"
-#include <string.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
+
+#ifndef __ASARU_PATH_H__
+#define __ASARU_PATH_H__
+
+#include <stddef.h>
+
+// asaru_path_t is the owner of each string in components
+typedef struct {
+    const char** components;
+    size_t count;
+    size_t capacity;
+} asaru_path_t;
+
+asaru_path_t* asaru_path_create();
+
+void asaru_path_free(asaru_path_t**);
+
+void asaru_path_push(asaru_path_t*, const char*);
+
+void asaru_path_pop(asaru_path_t*);
 
 
-void* alloc(size_t size) {
-    void* c = malloc(size);
-    if (c == NULL) {
-        perror("malloc");
-        exit(2);
-    }
-
-    return c;
-}
-
-void* ralloc(void* ptr, size_t size) {
-    void* new = realloc(ptr, size);
-    if (new == NULL) {
-        perror("realloc");
-        exit(2);
-    }
-
-    return new;
-}
-
-bool streq(const char * lhs, const char * rhs) {
-    return strcmp(lhs, rhs) == 0;
-}
-
-char* strclone(const char* src) {
-    size_t length = strlen(src);
-    char* cp = alloc(length + 1);
-    strncpy(cp, src, length + 1);
-    return cp;
-}
+#endif

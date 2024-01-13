@@ -19,12 +19,23 @@
 #define __ASARU_UTIL_H__
 
 #include <stddef.h>
+#include <stdbool.h>
 
 
 /**
 Same as malloc but exit(2) if the pointer returned by malloc is NULL
 */
 void* alloc(size_t);
+
+/**
+Same as realloc but exit(2) if the pointer returned by realloc is NULL
+*/
+void* ralloc(void*, size_t);
+
+bool streq(const char*, const char*);
+
+char* strclone(const char*);
+
 
 
 #endif
