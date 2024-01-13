@@ -30,7 +30,11 @@ command_t command_find(args_t* args) {
     const char* cmd = string_ptr(args->argv[0]);;
     if (streq(cmd, "ls")) {
         return asaru_ls;
-    } else if (streq(cmd, "exit")) {
+    } 
+    if (streq(cmd, "stat")) {
+        return asaru_stat;
+    }
+    if (streq(cmd, "exit")) {
         return NULL;
     }
 

@@ -102,3 +102,9 @@ char** connection_info_file(connection_t* connection, const char* path, afc_erro
     *e = afc_get_file_info(connection->client, path, &info);
     return info;
 }
+
+char** connection_read_directory(connection_t* connection, const char* path, afc_error_t* e) {
+    char** entries = NULL;
+    *e = afc_read_directory(connection->client, path, &entries);
+    return entries;
+}

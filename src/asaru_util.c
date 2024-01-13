@@ -119,5 +119,5 @@ char* strclone(const char* src) {
 void print_array(char** array) {
     int i = 0;
     char* folder;
-    while( (folder = array[i]) ) printf("%02d : %s\n", ++i, folder);
+    while( (folder = array[i++]) ) printf("%s\n", folder);
 }

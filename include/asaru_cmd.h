@@ -19,5 +19,6 @@
 #define __ASARU_CMD_H__
 
 #include "asaru_ls.h"
+#include "asaru_stat.h"
 
 #endif

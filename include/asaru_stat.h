@@ -16,9 +16,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef __ASARU_FSTAT_H__
-#define __ASARU_FSTAT_H__
+#ifndef __ASARU_STAT_H__
+#define __ASARU_STAT_H__
 
+#include "asaru_path.h"
+#include "asaru_util.h"
+#include "connection.h"
 #include <stddef.h>
 
 typedef enum {
@@ -32,9 +35,11 @@ typedef struct {
     size_t st_size;
     size_t st_blocks;
     size_t st_nlink;
-    size_t st_mtime;
+    size_t st_mtimes;
     size_t st_birthtime;
 } asaru_fstat_t;
+
+afc_error_t asaru_stat(connection_t*, asaru_path_t*, args_t*);
 
 
 asaru_fkind_t asaru_file_kind_of_string(const char*);

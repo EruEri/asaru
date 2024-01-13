@@ -18,7 +18,6 @@
 
 #include "../include/asaru_ls.h"
 #include "../include/asaru_util.h"
-#include "../include/asaru_fstat.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -29,13 +28,12 @@ afc_error_t asaru_ls(connection_t* connection, asaru_path_t* path, args_t* args)
     const char* s = args->argc == 2 ? args->argv[1]->ptr : NULL;
     spath = asaru_path_to_string_cat(path, s);
     printf("path = %s\n", spath);
-    dictionary = connection_info_file(connection, spath, &e);
+    dictionary = connection_read_directory(connection, spath, &e);
     if (e != AFC_E_SUCCESS) {
-        goto clean;
-    }
+       goto clean;
+   }
 
-    asaru_fstat_t stat = asaru_stat_of_dictionary((const char**) dictionary);
-    asaru_fstat_print(stat);
+   print_array(dictionary);
 
 clean:
     afc_dictionary_free(dictionary);

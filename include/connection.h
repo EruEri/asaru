@@ -48,4 +48,9 @@ The caller is responsible to free with [afc_dictionary_free]
 */
 char** connection_info_file(connection_t*, const char*, afc_error_t* e);
 
+/**
+The caller is responsible to free with [afc_dictionary_free]
+*/
+char** connection_read_directory(connection_t*, const char*, afc_error_t*);
+
 #endif
