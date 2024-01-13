@@ -18,6 +18,7 @@
 
 #include "../include/asaru_string.h"
 #include "../include/asaru_util.h"
+#include <ctype.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
@@ -54,6 +55,16 @@ string_t* string_alloc(const char* in) {
 
 char* string_ptr(string_t* p) {
     return p->ptr;
+}
+
+bool string_is_blank(const string_t* s) {
+    if (s->len == 0 || s->ptr == NULL) return true;
+    for (size_t i = 0; i < s->len; s += 1) {
+        int c = s->ptr[i];
+        if (isspace(c) || isblank(c)) return true;
+    }
+
+    return false;
 }
 
 void string_cat(string_t* dst, const string_t* rhs) {

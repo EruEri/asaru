@@ -20,6 +20,7 @@
 
 
 #include <stddef.h>
+#include <stdbool.h>
 
 typedef struct {
     char* ptr;
@@ -34,5 +35,6 @@ void string_cat(string_t*, const string_t*);
 void string_free(string_t*);
 char* string_ptr(string_t*);
 int string_cmp(const string_t*, const string_t*);
+bool string_is_blank(const string_t*);
 
 #endif

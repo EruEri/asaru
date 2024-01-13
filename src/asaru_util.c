@@ -62,9 +62,11 @@ args_t* parse_string(char * input) {
         seen_char = true;
     }
 
-    argv = ralloc(argv, sizeof(char*) * (argc + 1));
-    argv[argc] = current;
-    argc += 1;
+    if (!string_is_blank(current)) {
+        argv = ralloc(argv, sizeof(char*) * (argc + 1));
+        argv[argc] = current;
+        argc += 1;
+    }
 
     args->argc = argc;
     args->argv = argv;
