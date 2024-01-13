@@ -15,11 +15,14 @@
 //                                                                                            //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ASARU_CMD_H__
-#define __ASARU_CMD_H__
 
-#include "asaru_ls.h"
-#include "asaru_stat.h"
-#include "asaru_pwd.h"
+#ifndef __ASARU_PWD_H__
+#define __ASARU_PWD_H__
+
+#include "asaru_path.h"
+#include "asaru_util.h"
+#include "connection.h"
+
+afc_error_t asaru_pwd(connection_t*, asaru_path_t*, args_t*);
 
 #endif
