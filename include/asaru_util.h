@@ -36,6 +36,7 @@ bool streq(const char*, const char*);
 
 char* strclone(const char*);
 
+void print_array(char**);
 
 
 #endif

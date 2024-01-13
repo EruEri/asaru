@@ -96,3 +96,9 @@ void connection_free(connection_t** rconnection) {
     free(connection);
     *rconnection = NULL;
 }
+
+char** connection_info_file(connection_t* connection, const char* path, afc_error_t* e) {
+    char** info = NULL;
+    *e = afc_get_file_info(connection->client, path, &info);
+    return info;
+}

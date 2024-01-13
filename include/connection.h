@@ -43,4 +43,9 @@ typedef struct{
 connection_t* connection_create(connection_error_t* e);
 void connection_free(connection_t**);
 
+/**
+The caller is responsible to free with [afc_dictionary_free]
+*/
+char** connection_info_file(connection_t*, const char*, afc_error_t* e);
+
 #endif

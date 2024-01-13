@@ -52,3 +52,9 @@ char* strclone(const char* src) {
     strncpy(cp, src, length + 1);
     return cp;
 }
+
+void print_array(char** array) {
+    int i = 0;
+    char* folder;
+    while( (folder = array[i]) ) printf("%02d : %s\n", ++i, folder);
+}

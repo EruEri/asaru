@@ -16,29 +16,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef __ASARU_PATH_H__
-#define __ASARU_PATH_H__
+#ifndef __ASARU_LS_H__
+#define __ASARU_LS_H__
 
-#include <stddef.h>
 
-// asaru_path_t is the owner of each string in components
-typedef struct {
-    const char** components;
-    size_t count;
-    size_t capacity;
-} asaru_path_t;
+#include "asaru_path.h"
+#include "connection.h"
 
-asaru_path_t* asaru_path_create();
-
-void asaru_path_free(asaru_path_t**);
-
-void asaru_path_push(asaru_path_t*, const char*);
-
-void asaru_path_pop(asaru_path_t*);
-
-char* asaru_path_to_string(asaru_path_t*);
-
-char* asaru_path_to_string_cat(asaru_path_t*, const char*);
-
+afc_error_t asaru_ls(connection_t*, asaru_path_t*, const char* args);
 
 #endif

@@ -20,6 +20,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include <string.h>
 #include "../include/asaru_util.h"
 
 static void asaru_path_realloc(asaru_path_t* path) {
@@ -76,3 +77,49 @@ void asaru_path_push(asaru_path_t * path, const char* c) {
     path->components[path->count] = copy;
     path->count += 1;
 }
+
+char* asaru_path_concat(size_t index, const char** strs, size_t length) {
+    size_t diff = length - index;
+    if (diff == 0) {
+        char* s = strclone("");
+        return s;
+    } else if (diff == 1) {
+        return strclone(strs[index]);
+    } else {
+        char* nexts = asaru_path_concat(index + 1, strs, length);
+        const char* current = strs[index];
+        size_t len_nexts = strlen(nexts);
+        size_t len_current = strlen(current);
+        size_t len_total = len_current + 1 + len_nexts + 1;
+        char* cat = alloc(len_total);
+        memcpy(cat, current, len_current);
+        cat[len_current] = '/';
+        strcpy(cat + len_current + 1, nexts);
+        free((void *) nexts);
+        return cat;
+    }
+}
+
+char* asaru_path_to_string_cat(asaru_path_t* path, const char* extra) {
+    char* root = asaru_path_concat(0, path->components, path->count);
+    size_t len_root = strlen(root);
+    char* cat = alloc(len_root + 2);
+    *cat = '/';
+    strcpy(cat + 1, root);
+    free(root);
+    if (extra == NULL) return cat;
+    size_t len_cat = strlen(cat); 
+    size_t len_extra = strlen(extra);
+    size_t len_total = len_cat + 1 + len_extra + 1;
+    char* catcat = alloc(len_total);
+    memcpy(catcat, cat, len_cat);
+    cat[len_cat] = '/';
+    strcpy(catcat + len_cat + 1, extra);
+    free(cat);
+    return catcat;
+}
+
+char* asaru_path_to_string(asaru_path_t* path) {
+    return asaru_path_to_string_cat(path, NULL);
+}
+

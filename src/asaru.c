@@ -17,11 +17,22 @@
 
 
 #include "../include/connection.h"
+#include "../include/asaru_path.h"
+#include "../include/asaru_cmd.h"
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 
 int repl(connection_t* connection) {
+    asaru_path_t* path = asaru_path_create();
+    while (true) {
+        afc_error_t e = asaru_ls(connection, path, NULL);
+        printf("ls code = %d\n", e);
+        break;
+    };
+
+    asaru_path_free(&path);
     return 0;
 }
 
