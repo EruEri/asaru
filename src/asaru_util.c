@@ -16,10 +16,71 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "../include/asaru_util.h"
+#include <ctype.h>
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+
+args_t* parse_string(char * input) {
+    size_t true_length = strlen(input);
+    args_t* args = alloc(sizeof(args_t));
+    string_t** argv = alloc(0);
+    string_t* current = string_alloc("");
+    int argc = 0;
+    size_t index = 0;
+    bool escaped = false;
+    bool quoted = false;
+    bool seen_char = false;
+
+    while (index < true_length) {
+        char c = input[index];
+        if (escaped) {
+            string_add_char(current, c);
+            escaped = false;
+        } else if (c == '\\') {
+            escaped = true;
+        } else if (quoted) {
+            string_add_char(current, c);
+        } else if (c == '\"') {
+            quoted = ! quoted;
+        } else if (isspace(c)) {
+            if (seen_char) {
+                argv = ralloc(argv, sizeof(char*) * (argc + 1));
+                argv[argc] = current;
+                argc += 1;
+                seen_char = false;
+                current = string_alloc("");
+            }
+            index += 1;
+            continue;
+        } else {
+            string_add_char(current, c);
+        }
+        index += 1;
+        seen_char = true;
+    }
+
+    argv = ralloc(argv, sizeof(char*) * (argc + 1));
+    argv[argc] = current;
+    argc += 1;
+
+    args->argc = argc;
+    args->argv = argv;
+
+    return args;
+}
+
+void args_free(args_t** rargs) {
+    args_t* args = *rargs;
+    for (int i = 0; i < args->argc; i += 1) {
+        string_free(args->argv[i]);
+    }
+    free(args->argv);
+    free(args);
+    *rargs = NULL;
+}
 
 
 void* alloc(size_t size) {

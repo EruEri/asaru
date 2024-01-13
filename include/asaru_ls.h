@@ -21,8 +21,9 @@
 
 
 #include "asaru_path.h"
+#include "asaru_util.h"
 #include "connection.h"
 
-afc_error_t asaru_ls(connection_t*, asaru_path_t*, const char* args);
+afc_error_t asaru_ls(connection_t*, asaru_path_t*, args_t*);
 
 #endif

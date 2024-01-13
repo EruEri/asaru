@@ -18,18 +18,44 @@
 
 #include "../include/connection.h"
 #include "../include/asaru_path.h"
+#include "../include/asaru_util.h"
 #include "../include/asaru_cmd.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef afc_error_t(*command_t)(connection_t*, asaru_path_t*, args_t*);
+
+command_t command_find(args_t* args) {
+    const char* cmd = string_ptr(args->argv[0]);;
+    if (streq(cmd, "ls")) {
+        return asaru_ls;
+    } else if (streq(cmd, "exit")) {
+        return NULL;
+    }
+
+    return NULL;
+}
 
 int repl(connection_t* connection) {
     asaru_path_t* path = asaru_path_create();
+    char buffer[256];
     while (true) {
-        afc_error_t e = asaru_ls(connection, path, NULL);
-        printf("ls code = %d\n", e);
-        break;
+        printf(">>> ");
+        // We say no to gets
+        char* s = fgets(buffer, sizeof(buffer), stdin);
+        args_t* args = parse_string(s);
+        if (args->argc == 0) {
+            args_free(&args);
+            continue;
+        }
+        command_t command = command_find(args);
+        if (command == NULL) {
+            args_free(&args);
+            break;
+        }
+        afc_error_t e = command(connection, path, args);
+        args_free(&args);
     };
 
     asaru_path_free(&path);

@@ -15,38 +15,24 @@
 //                                                                                            //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ASARU_UTIL_H__
-#define __ASARU_UTIL_H__
+#ifndef __ASARU_STRING_H__
+#define __ASARU_STRING_H__
 
-#include "asaru_string.h"
+
 #include <stddef.h>
-#include <stdbool.h>
 
 typedef struct {
-    int argc;
-    string_t** argv;
-} args_t;
+    char* ptr;
+    // should be at most capacity - 1 to include the \0
+    size_t len;
+    size_t capacity;
+} string_t;
 
-args_t* parse_string(char*);
-
-void args_free(args_t**);
-
-
-/**
-Same as malloc but exit(2) if the pointer returned by malloc is NULL
-*/
-void* alloc(size_t);
-
-/**
-Same as realloc but exit(2) if the pointer returned by realloc is NULL
-*/
-void* ralloc(void*, size_t);
-
-bool streq(const char*, const char*);
-
-char* strclone(const char*);
-
-void print_array(char**);
-
+string_t* string_alloc(const char*);
+void string_add_char(string_t*, const char);
+void string_cat(string_t*, const string_t*);
+void string_free(string_t*);
+char* string_ptr(string_t*);
+int string_cmp(const string_t*, const string_t*);
 
 #endif
