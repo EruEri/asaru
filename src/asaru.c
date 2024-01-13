@@ -41,8 +41,7 @@ command_t command_find(args_t* args) {
     if (streq(cmd, "exit")) {
         return NULL;
     }
-
-    return NULL;
+    return asaru_unknown;
 }
 
 int repl(connection_t* connection) {

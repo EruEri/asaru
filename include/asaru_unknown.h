@@ -15,13 +15,13 @@
 //                                                                                            //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ASARU_CMD_H__
-#define __ASARU_CMD_H__
+#ifndef __ASARU_UNKNOWN_H__
+#define __ASARU_UNKNOWN_H__
 
-#include "asaru_ls.h"
-#include "asaru_stat.h"
-#include "asaru_pwd.h"
-#include "asaru_cd.h"
-#include "asaru_unknown.h"
+#include "asaru_path.h"
+#include "asaru_util.h"
+#include "connection.h"
+
+afc_error_t asaru_unknown(connection_t*, asaru_path_t*, args_t*);
 
 #endif

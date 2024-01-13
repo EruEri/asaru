@@ -15,13 +15,12 @@
 //                                                                                            //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ASARU_CMD_H__
-#define __ASARU_CMD_H__
+#include "../include/asaru_unknown.h"
+#include <stdio.h>
 
-#include "asaru_ls.h"
-#include "asaru_stat.h"
-#include "asaru_pwd.h"
-#include "asaru_cd.h"
-#include "asaru_unknown.h"
 
-#endif
+afc_error_t asaru_unknown(connection_t* connection, asaru_path_t* path, args_t* args) {
+    const char* cmd = args->argv[0]->ptr;
+    printf("unknown command : %s\n", cmd);
+    return AFC_E_SUCCESS;
+}
