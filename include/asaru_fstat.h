@@ -15,26 +15,32 @@
 //                                                                                            //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ASARU_STRING_H__
-#define __ASARU_STRING_H__
 
+#ifndef __ASARU_FSTAT_H__
+#define __ASARU_FSTAT_H__
 
 #include <stddef.h>
-#include <stdbool.h>
+
+typedef enum {
+    AFK_FILE,
+    AFK_DIRECTORY,
+    AFK_UNKNOWN
+} asaru_fkind_t;
 
 typedef struct {
-    char* ptr;
-    // should be at most capacity - 1 to include the \0
-    size_t len;
-    size_t capacity;
-} string_t;
+    asaru_fkind_t fkind;
+    size_t st_size;
+    size_t st_blocks;
+    size_t st_nlink;
+    size_t st_mtime;
+    size_t st_birthtime;
+} asaru_fstat_t;
 
-string_t* string_alloc(const char*);
-void string_add_char(string_t*, const char);
-void string_cat(string_t*, const string_t*);
-void string_free(string_t*);
-char* string_ptr(string_t*);
-int string_cmp(const string_t*, const string_t*);
-bool string_is_blank(const string_t*);
+
+asaru_fkind_t asaru_file_kind_of_string(const char*);
+
+asaru_fstat_t asaru_stat_of_dictionary(const char**);
+
+void asaru_fstat_print(asaru_fstat_t);
 
 #endif

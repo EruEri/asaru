@@ -7,7 +7,7 @@
 // of the GNU General Public License as published by the Free Software Foundation,            //
 // either version 3 of the License, or (at your option) any later version.                    //
 //                                                                                            //
-// iexplore is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;      //
+// asaru is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;         //
 // without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR           //
 // PURPOSE.  See the GNU General Public License for more details.                             //
 // You should have received a copy of the GNU General Public License along with asaru.        //
@@ -18,25 +18,27 @@
 
 #include "../include/asaru_ls.h"
 #include "../include/asaru_util.h"
+#include "../include/asaru_fstat.h"
 #include <stdio.h>
 #include <stdlib.h>
 
 afc_error_t asaru_ls(connection_t* connection, asaru_path_t* path, args_t* args) {
     char* spath = NULL;
-    char** dictinary  = NULL;
+    char** dictionary  = NULL;
     afc_error_t e;
     const char* s = args->argc == 2 ? args->argv[1]->ptr : NULL;
     spath = asaru_path_to_string_cat(path, s);
     printf("path = %s\n", spath);
-    dictinary = connection_info_file(connection, spath, &e);
+    dictionary = connection_info_file(connection, spath, &e);
     if (e != AFC_E_SUCCESS) {
         goto clean;
     }
 
-    print_array(dictinary);
+    asaru_fstat_t stat = asaru_stat_of_dictionary((const char**) dictionary);
+    asaru_fstat_print(stat);
 
 clean:
-    afc_dictionary_free(dictinary);
+    afc_dictionary_free(dictionary);
     free(spath);
     return e;
 }

@@ -16,61 +16,73 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#include "../include/connection.h"
-#include "../include/asaru_path.h"
+#include "../include/asaru_fstat.h"
 #include "../include/asaru_util.h"
-#include "../include/asaru_cmd.h"
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef afc_error_t(*command_t)(connection_t*, asaru_path_t*, args_t*);
-
-command_t command_find(args_t* args) {
-    const char* cmd = string_ptr(args->argv[0]);;
-    if (streq(cmd, "ls")) {
-        return asaru_ls;
-    } else if (streq(cmd, "exit")) {
-        return NULL;
-    }
-
-    return NULL;
+asaru_fkind_t asaru_file_kind_of_string(const char* s) {
+    if (streq("S_IFDIR", s)) return AFK_DIRECTORY;
+    else return AFK_UNKNOWN;
 }
 
-int repl(connection_t* connection) {
-    asaru_path_t* path = asaru_path_create();
-    char buffer[256];
-    while (true) {
-        printf(">>> ");
-        // We say no to gets
-        char* s = fgets(buffer, sizeof(buffer), stdin);
-        args_t* args = parse_string(s);
-        if (args->argc == 0) {
-            args_free(&args);
-            continue;
-        }
-        command_t command = command_find(args);
-        if (command == NULL) {
-            args_free(&args);
+
+asaru_fstat_t asaru_stat_of_dictionary(const char** dictionary) {
+    int i = 0;
+    const char* entry;
+    asaru_fstat_t stats = {};
+    while ( (entry = dictionary[i]) ) {
+        switch (i) {
+        case 1: {
+            stats.st_size = atol(entry);
             break;
         }
-        afc_error_t e = command(connection, path, args);
-        args_free(&args);
-    };
-
-    asaru_path_free(&path);
-    return 0;
-}
-
-int main(int argc, const char ** argv) {
-    connection_error_t e;
-    connection_t* connection = connection_create(&e);
-    if (connection == NULL) {
-        fprintf(stderr, "kind  = %u\nvalue = %d\n", e.kind, e.error_value);
-        exit(1);
+        case 3: {
+            stats.st_blocks = atol(entry);
+            break;
+        }
+        case 5: {
+            stats.st_nlink = atol(entry);
+            break;
+        }
+        case 7: {
+            stats.fkind = asaru_file_kind_of_string(entry);
+            break;
+        }
+        case 9: {
+            stats.st_mtime = atol(entry);
+            break;
+        }
+        case 11: {
+            stats.st_birthtime = atol(entry);
+            break;
+        }
+        }
+        i+=1;
     }
 
-    repl(connection);
+    return stats;
+}
 
-    connection_free(&connection);
+
+static const char* asaru_kind_to_stringl(asaru_fkind_t k) {
+    switch (k) {
+    case AFK_FILE:
+        return "Regular file";
+    case AFK_DIRECTORY:
+        return "Directory";
+    case AFK_UNKNOWN:
+        return "Unknown";
+    }
+    return "Not matched";
+}
+
+
+void asaru_fstat_print(asaru_fstat_t stat) {
+    printf("kind file    = %s\n", asaru_kind_to_stringl(stat.fkind));
+    printf("st_size      = %lu\n", (unsigned long) stat.st_size);
+    printf("st_blocks    = %lu\n", (unsigned long) stat.st_blocks);
+    printf("st_nlink     = %lu\n", (unsigned long) stat.st_nlink);
+    printf("st_mtime     = %lu\n", (unsigned long) stat.st_mtime);
+    printf("st_birthtime = %lu\n", (unsigned long) stat.st_birthtime);
 }
