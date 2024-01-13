@@ -9,7 +9,7 @@ You will need:
 - C compiler compliant c99
 - pkg-config
 - The following C librarie:
-  - [libimobiledevice]()
+  - [libimobiledevice](https://libimobiledevice.org/)
 - GNU make
 - Probably an Unix/Unix-like (MacOS/ Linux/ FreeBSD / ...):
     - I don't know if it will work on Windows.
