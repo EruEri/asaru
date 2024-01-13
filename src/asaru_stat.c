@@ -75,7 +75,7 @@ asaru_fstat_t asaru_stat_of_dictionary(const char** dictionary) {
             break;
         }
         case 11: {
-            stats.st_birthtime = atol(entry);
+            stats.st_birthtimes = atol(entry);
             break;
         }
         }
@@ -105,5 +105,5 @@ void asaru_fstat_print(asaru_fstat_t stat) {
     printf("st_blocks    = %lu\n", (unsigned long) stat.st_blocks);
     printf("st_nlink     = %lu\n", (unsigned long) stat.st_nlink);
     printf("st_mtime     = %lu\n", (unsigned long) stat.st_mtimes);
-    printf("st_birthtime = %lu\n", (unsigned long) stat.st_birthtime);
+    printf("st_birthtime = %lu\n", (unsigned long) stat.st_birthtimes);
 }

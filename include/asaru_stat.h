@@ -36,7 +36,7 @@ typedef struct {
     size_t st_blocks;
     size_t st_nlink;
     size_t st_mtimes;
-    size_t st_birthtime;
+    size_t st_birthtimes;
 } asaru_fstat_t;
 
 afc_error_t asaru_stat(connection_t*, asaru_path_t*, args_t*);
