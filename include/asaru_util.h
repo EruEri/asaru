@@ -44,6 +44,8 @@ void* ralloc(void*, size_t);
 
 bool streq(const char*, const char*);
 
+bool is_absolute_path(const char*);
+
 char* strclone(const char*);
 
 void print_array(char**);

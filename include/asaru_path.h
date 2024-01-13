@@ -30,6 +30,8 @@ typedef struct {
 
 asaru_path_t* asaru_path_create();
 
+void asaru_path_clear(asaru_path_t*);
+
 void asaru_path_free(asaru_path_t**);
 
 void asaru_path_push(asaru_path_t*, const char*);

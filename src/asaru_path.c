@@ -35,6 +35,13 @@ static bool asaru_path_need_realloc(asaru_path_t* path) {
     return path->count >= path->capacity;
 }
 
+void asaru_path_clear(asaru_path_t* path) {
+    for (size_t i = 0; i < path->count; i += 1) {
+        free((void *) path->components[i]);
+    }
+    path->count = 0;
+}
+
 asaru_path_t* asaru_path_create() {
     size_t capacity = 1;
     size_t count = 0;

@@ -109,6 +109,10 @@ bool streq(const char * lhs, const char * rhs) {
     return strcmp(lhs, rhs) == 0;
 }
 
+bool is_absolute_path(const char* s) {
+    return s != NULL && s[0] == '/';
+}
+
 char* strclone(const char* src) {
     size_t length = strlen(src);
     char* cp = alloc(length + 1);

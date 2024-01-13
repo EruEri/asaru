@@ -15,28 +15,14 @@
 //                                                                                            //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef __ASARU_CD_H__
+#define __ASARU_CD_H__
 
-#include "../include/asaru_ls.h"
-#include "../include/asaru_util.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include "asaru_path.h"
+#include "asaru_util.h"
+#include "connection.h"
 
-afc_error_t asaru_ls(connection_t* connection, asaru_path_t* path, args_t* args) {
-    char* spath = NULL;
-    char** dictionary  = NULL;
-    afc_error_t e;
-    const char* s = args->argc == 2 ? args->argv[1]->ptr : NULL;
-    spath = is_absolute_path(s) ? strclone(s) : asaru_path_to_string_cat(path, s);
-    printf("path = %s\n", spath);
-    dictionary = connection_read_directory(connection, spath, &e);
-    if (e != AFC_E_SUCCESS) {
-       goto clean;
-   }
+afc_error_t asaru_cd(connection_t*, asaru_path_t*, args_t*);
 
-   print_array(dictionary);
 
-clean:
-    afc_dictionary_free(dictionary);
-    free(spath);
-    return e;
-}
+#endif

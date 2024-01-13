@@ -21,5 +21,6 @@
 #include "asaru_ls.h"
 #include "asaru_stat.h"
 #include "asaru_pwd.h"
+#include "asaru_cd.h"
 
 #endif

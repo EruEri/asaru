@@ -16,24 +16,30 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#include "../include/asaru_ls.h"
-#include "../include/asaru_util.h"
-#include <stdio.h>
+#include "../include/asaru_cd.h"
+#include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 
-afc_error_t asaru_ls(connection_t* connection, asaru_path_t* path, args_t* args) {
+afc_error_t asaru_cd(connection_t* connection, asaru_path_t* path, args_t* args) {
     char* spath = NULL;
     char** dictionary  = NULL;
     afc_error_t e;
-    const char* s = args->argc == 2 ? args->argv[1]->ptr : NULL;
-    spath = is_absolute_path(s) ? strclone(s) : asaru_path_to_string_cat(path, s);
-    printf("path = %s\n", spath);
+    char* s = args->argc == 2 ? args->argv[1]->ptr : NULL;
+    bool is_absolute = is_absolute_path(s);
+    spath = is_absolute ? strclone(s) : asaru_path_to_string_cat(path, s);
     dictionary = connection_read_directory(connection, spath, &e);
-    if (e != AFC_E_SUCCESS) {
+    if (e != AFC_E_SUCCESS || s == NULL) {
        goto clean;
-   }
+    }
+    if (is_absolute) asaru_path_clear(path);
 
-   print_array(dictionary);
+    const char* current = strtok(s, "/");
+
+    while (current != NULL) {
+        asaru_path_push(path, current);
+        current = strtok(NULL, "/");
+    }
 
 clean:
     afc_dictionary_free(dictionary);
