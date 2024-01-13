@@ -19,6 +19,7 @@
 #include "../include/asaru_path.h"
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "../include/asaru_util.h"
@@ -113,7 +114,7 @@ char* asaru_path_to_string_cat(asaru_path_t* path, const char* extra) {
     size_t len_total = len_cat + 1 + len_extra + 1;
     char* catcat = alloc(len_total);
     memcpy(catcat, cat, len_cat);
-    cat[len_cat] = '/';
+    catcat[len_cat] = '/';
     strcpy(catcat + len_cat + 1, extra);
     free(cat);
     return catcat;
