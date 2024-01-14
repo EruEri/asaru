@@ -66,6 +66,8 @@ args_t* parse_string(char * input) {
         argv = ralloc(argv, sizeof(char*) * (argc + 1));
         argv[argc] = current;
         argc += 1;
+    } else {
+        string_free(current);
     }
 
     args->argc = argc;

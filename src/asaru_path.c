@@ -64,9 +64,10 @@ void asaru_path_free(asaru_path_t** rpath) {
 }
 
 void asaru_path_pop(asaru_path_t* path) {
-    if (path->count == 0) return;
-    free((void*) path->components[path->count]);
+    if (path->count <= 0) return;
     path->count -= 1;
+    free((void*) path->components[path->count]);
+
 }
 
 void asaru_path_push(asaru_path_t * path, const char* c) {
