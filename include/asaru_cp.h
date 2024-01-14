@@ -15,40 +15,13 @@
 //                                                                                            //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ASARU_UTIL_H__
-#define __ASARU_UTIL_H__
+#ifndef __ASARU_CP_H__
+#define __ASARU_CP_H__
 
-#include "asaru_string.h"
-#include <stddef.h>
-#include <stdbool.h>
+#include "asaru_path.h"
+#include "asaru_util.h"
+#include "connection.h"
 
-typedef struct {
-    int argc;
-    char** argv;
-} args_t;
-
-args_t* parse_string(char*);
-
-void args_free(args_t**);
-
-
-/**
-Same as malloc but exit(2) if the pointer returned by malloc is NULL
-*/
-void* alloc(size_t);
-
-/**
-Same as realloc but exit(2) if the pointer returned by realloc is NULL
-*/
-void* ralloc(void*, size_t);
-
-bool streq(const char*, const char*);
-
-bool is_absolute_path(const char*);
-
-char* strclone(const char*);
-
-void print_array(char**);
-
+afc_error_t asaru_cp(connection_t*, asaru_path_t*, args_t*);
 
 #endif

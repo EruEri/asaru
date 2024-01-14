@@ -73,7 +73,7 @@ args_t* parse_string(char * input) {
     }
 
     args->argc = argc;
-    args->argv = (const char**) argv;
+    args->argv = argv;
 
     return args;
 }

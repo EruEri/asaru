@@ -109,7 +109,7 @@ char* asaru_path_concat(size_t index, const char** strs, size_t length) {
     }
 }
 
-char* asaru_path_to_string_cat(asaru_path_t* path, const char* extra) {
+char* asaru_path_to_string_cat(const asaru_path_t* path, const char* extra) {
     char* root = asaru_path_concat(0, path->components, path->count);
     size_t len_root = strlen(root);
     char* cat = alloc(len_root + 2);
@@ -128,7 +128,18 @@ char* asaru_path_to_string_cat(asaru_path_t* path, const char* extra) {
     return catcat;
 }
 
-char* asaru_path_to_string(asaru_path_t* path) {
+char* asaru_path_to_string(const asaru_path_t* path) {
     return asaru_path_to_string_cat(path, NULL);
 }
 
+asaru_path_t* asaru_path_clone(const asaru_path_t* path) {
+    asaru_path_t* cpath = alloc(sizeof(asaru_path_t));
+    const char** compoments = alloc(sizeof(const char**) * path->capacity);
+    for (size_t i = 0; i < path->count; i+=1) {
+        compoments[i] = strclone(path->components[i]);
+    }
+    cpath->components = compoments;
+    cpath->capacity = path->capacity;
+    cpath->count = path->count;
+    return cpath;
+}

@@ -28,19 +28,12 @@ typedef afc_error_t(*command_t)(connection_t*, asaru_path_t*, args_t*);
 
 command_t command_find(args_t* args) {
     const char* cmd = args->argv[0];
-    if (streq(cmd, "cd")) 
-        return asaru_cd;
-    if (streq(cmd, "ls"))
-        return asaru_ls;
-    if (streq(cmd, "pwd")) {
-        return asaru_pwd;
-    }
-    if (streq(cmd, "stat")) {
-        return asaru_stat;
-    }
-    if (streq(cmd, "exit")) {
-        return NULL;
-    }
+    if (streq(cmd, "cd")) return asaru_cd;
+    if (streq(cmd, "cp")) return asaru_cp;
+    if (streq(cmd, "ls")) return asaru_ls;
+    if (streq(cmd, "pwd")) return asaru_pwd;
+    if (streq(cmd, "stat")) return asaru_stat;
+    if (streq(cmd, "exit")) return NULL;
     return asaru_unknown;
 }
 

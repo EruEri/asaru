@@ -18,10 +18,12 @@
 #ifndef __ASARU_CMD_H__
 #define __ASARU_CMD_H__
 
+#include "asaru_cd.h"
+#include "asaru_cp.h"
 #include "asaru_ls.h"
 #include "asaru_stat.h"
 #include "asaru_pwd.h"
-#include "asaru_cd.h"
 #include "asaru_unknown.h"
+
 
 #endif

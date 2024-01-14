@@ -15,40 +15,41 @@
 //                                                                                            //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ASARU_UTIL_H__
-#define __ASARU_UTIL_H__
-
-#include "asaru_string.h"
-#include <stddef.h>
+#include "../include/asaru_cp.h"
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
-typedef struct {
-    int argc;
-    char** argv;
-} args_t;
+afc_error_t asaru_cp(connection_t* connection, asaru_path_t* apth, args_t* args) {
+    char* input = NULL;
+    char* output = NULL;
+    bool recursive = false;
+    while (true) {
+        int i = getopt(args->argc, (char* const*) args->argv, "+ri:o:");
+        if (i == -1) {
+            break;
+        }
+        switch (i) {
+        case 'r':
+            recursive = true;
+            break;
+        case 'i':
+            input = optarg;
+            break;
+        case 'o':
+            output = optarg;
+            break;
+        default:
+            break;
+        }
+    }
 
-args_t* parse_string(char*);
+    optind = 1;
+    if (input == NULL || output == NULL) {
+        fprintf(stderr, "usage : cp [-r] -i <ipath> -o <opath>\n");
+        return AFC_E_SUCCESS;
+    };
 
-void args_free(args_t**);
-
-
-/**
-Same as malloc but exit(2) if the pointer returned by malloc is NULL
-*/
-void* alloc(size_t);
-
-/**
-Same as realloc but exit(2) if the pointer returned by realloc is NULL
-*/
-void* ralloc(void*, size_t);
-
-bool streq(const char*, const char*);
-
-bool is_absolute_path(const char*);
-
-char* strclone(const char*);
-
-void print_array(char**);
-
-
-#endif
+    return AFC_E_SUCCESS;
+}

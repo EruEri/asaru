@@ -38,9 +38,11 @@ void asaru_path_push(asaru_path_t*, const char*);
 
 void asaru_path_pop(asaru_path_t*);
 
-char* asaru_path_to_string(asaru_path_t*);
+char* asaru_path_to_string(const asaru_path_t*);
 
-char* asaru_path_to_string_cat(asaru_path_t*, const char*);
+char* asaru_path_to_string_cat(const asaru_path_t*, const char*);
+
+asaru_path_t* asaru_path_clone(const asaru_path_t*);
 
 
 #endif
