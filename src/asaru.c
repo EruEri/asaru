@@ -27,7 +27,7 @@
 typedef afc_error_t(*command_t)(connection_t*, asaru_path_t*, args_t*);
 
 command_t command_find(args_t* args) {
-    const char* cmd = string_ptr(args->argv[0]);
+    const char* cmd = args->argv[0];
     if (streq(cmd, "cd")) 
         return asaru_cd;
     if (streq(cmd, "ls"))

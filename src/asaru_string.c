@@ -67,6 +67,10 @@ bool string_is_blank(const string_t* s) {
     return false;
 }
 
+void string_free_only(string_t* s) {
+    free((void*) s);
+}
+
 void string_cat(string_t* dst, const string_t* rhs) {
     size_t len = dst->capacity + rhs->len;
     if (dst->capacity - 1 < len) {

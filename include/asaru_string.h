@@ -33,6 +33,13 @@ string_t* string_alloc(const char*);
 void string_add_char(string_t*, const char);
 void string_cat(string_t*, const string_t*);
 void string_free(string_t*);
+
+/**
+Free [string_t] but keep the underlining pointer alive (ie. pointer returns by string_ptr)
+this pointer **must be freed** by free
+
+*/
+void string_free_only(string_t*);
 char* string_ptr(string_t*);
 int string_cmp(const string_t*, const string_t*);
 bool string_is_blank(const string_t*);

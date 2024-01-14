@@ -24,7 +24,7 @@
 
 typedef struct {
     int argc;
-    string_t** argv;
+    const char** argv;
 } args_t;
 
 args_t* parse_string(char*);

@@ -20,7 +20,7 @@
 
 
 afc_error_t asaru_unknown(connection_t* connection, asaru_path_t* path, args_t* args) {
-    const char* cmd = args->argv[0]->ptr;
+    const char* cmd = args->argv[0];
     printf("unknown command : %s\n", cmd);
     return AFC_E_SUCCESS;
 }

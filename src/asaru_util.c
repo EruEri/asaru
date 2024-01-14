@@ -26,7 +26,7 @@
 args_t* parse_string(char * input) {
     size_t true_length = strlen(input);
     args_t* args = alloc(sizeof(args_t));
-    string_t** argv = alloc(0);
+    char** argv = alloc(0);
     string_t* current = string_alloc("");
     int argc = 0;
     size_t index = 0;
@@ -48,7 +48,8 @@ args_t* parse_string(char * input) {
         } else if (isspace(c)) {
             if (seen_char) {
                 argv = ralloc(argv, sizeof(char*) * (argc + 1));
-                argv[argc] = current;
+                argv[argc] = string_ptr(current);
+                string_free_only(current);
                 argc += 1;
                 seen_char = false;
                 current = string_alloc("");
@@ -64,14 +65,15 @@ args_t* parse_string(char * input) {
 
     if (!string_is_blank(current)) {
         argv = ralloc(argv, sizeof(char*) * (argc + 1));
-        argv[argc] = current;
+        argv[argc] = string_ptr(current);
+        string_free_only(current);
         argc += 1;
     } else {
         string_free(current);
     }
 
     args->argc = argc;
-    args->argv = argv;
+    args->argv = (const char**) argv;
 
     return args;
 }
@@ -79,7 +81,7 @@ args_t* parse_string(char * input) {
 void args_free(args_t** rargs) {
     args_t* args = *rargs;
     for (int i = 0; i < args->argc; i += 1) {
-        string_free(args->argv[i]);
+        free( (void*) args->argv[i]);
     }
     free(args->argv);
     free(args);

@@ -26,7 +26,7 @@ afc_error_t asaru_stat(connection_t* connection, asaru_path_t* path, args_t* arg
     char* spath = NULL;
     char** dictionary  = NULL;
     afc_error_t e;
-    const char* s = args->argc == 2 ? args->argv[1]->ptr : NULL;
+    const char* s = args->argc == 2 ? args->argv[1] : NULL;
     spath = is_absolute_path(s) ? strclone(s) : asaru_path_to_string_cat(path, s);
     printf("path = %s\n", spath);
     dictionary = connection_info_file(connection, spath, &e);

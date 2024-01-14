@@ -25,7 +25,7 @@ afc_error_t asaru_cd(connection_t* connection, asaru_path_t* path, args_t* args)
     char* spath = NULL;
     char** dictionary  = NULL;
     afc_error_t e;
-    char* s = args->argc == 2 ? args->argv[1]->ptr : NULL;
+    char* s = args->argc == 2 ? args->argv[1] : NULL;
     bool is_absolute = is_absolute_path(s);
     spath = is_absolute ? strclone(s) : asaru_path_to_string_cat(path, s);
     dictionary = connection_read_directory(connection, spath, &e);
