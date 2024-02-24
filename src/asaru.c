@@ -15,14 +15,21 @@
 //                                                                                            //
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef __GNUC__
+
+#define _POSIX_C_SOURCE 2
+
+#endif
 
 #include "../include/connection.h"
 #include "../include/asaru_path.h"
 #include "../include/asaru_util.h"
 #include "../include/asaru_cmd.h"
+#include <unistd.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 
 typedef afc_error_t(*command_t)(connection_t*, asaru_path_t*, args_t*);
 
@@ -37,8 +44,16 @@ command_t command_find(args_t* args) {
     return asaru_unknown;
 }
 
-int repl(connection_t* connection) {
-    asaru_path_t* path = asaru_path_create();
+int repl(connection_t* connection, const char* opt_path) {
+    asaru_path_t* path = asaru_path_create(true);
+    if (opt_path) {
+        const char* argv[3];
+        argv[0] = "cd";
+        argv[1] = opt_path;
+        argv[2] = NULL;
+        args_t args = {.argc = 2, .argv =  (char**) &argv[0]};
+        asaru_cd(connection, path, &args);
+    }
     char buffer[256];
     while (true) {
         printf(">>> ");
@@ -63,6 +78,16 @@ int repl(connection_t* connection) {
 }
 
 int main(int argc, const char ** argv) {
+    const char* path = NULL;
+    while (true) {
+        int i = getopt(argc, (char* const *) argv, "+p:");
+        if (i == -1) break;
+        switch (i){
+        case 'p':
+            path = optarg;
+        };
+    }
+    optind = 1;
     connection_error_t e;
     connection_t* connection = connection_create(&e);
     if (connection == NULL) {
@@ -70,7 +95,6 @@ int main(int argc, const char ** argv) {
         exit(1);
     }
 
-    repl(connection);
-
+    repl(connection, path);
     connection_free(&connection);
 }

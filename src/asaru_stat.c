@@ -45,6 +45,7 @@ clean:
 
 asaru_fkind_t asaru_file_kind_of_string(const char* s) {
     if (streq("S_IFDIR", s)) return AFK_DIRECTORY;
+    else if (streq("S_IFREG", s)) return AFK_FILE;
     else return AFK_UNKNOWN;
 }
 

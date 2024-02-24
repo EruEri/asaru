@@ -42,7 +42,7 @@ void asaru_path_clear(asaru_path_t* path) {
     path->count = 0;
 }
 
-asaru_path_t* asaru_path_create() {
+asaru_path_t* asaru_path_create(bool is_absolute) {
     size_t capacity = 1;
     size_t count = 0;
     const char** components = alloc(sizeof(const char*));
@@ -50,6 +50,7 @@ asaru_path_t* asaru_path_create() {
     path->components = components;
     path->count = count;
     path->capacity = capacity;
+    path->is_absolute = is_absolute;
     return path;
 }
 
@@ -87,6 +88,10 @@ void asaru_path_push(asaru_path_t * path, const char* c) {
     path->count += 1;
 }
 
+const char* asaru_path_last_component_ref(const asaru_path_t* apth) {
+    return apth->components[apth->count - 1];
+}
+
 char* asaru_path_concat(size_t index, const char** strs, size_t length) {
     size_t diff = length - index;
     if (diff == 0) {
@@ -112,9 +117,18 @@ char* asaru_path_concat(size_t index, const char** strs, size_t length) {
 char* asaru_path_to_string_cat(const asaru_path_t* path, const char* extra) {
     char* root = asaru_path_concat(0, path->components, path->count);
     size_t len_root = strlen(root);
-    char* cat = alloc(len_root + 2);
-    *cat = '/';
-    strcpy(cat + 1, root);
+    char* cat = NULL;
+    if (!path->is_absolute) {
+        cat = alloc(len_root + 3);
+        *cat = '.';
+        *(cat + 1) = '/';
+        strcpy(cat + 2, root);
+    } else {
+        cat = alloc(len_root + 2);
+        *cat = '/';
+        strcpy(cat + 1, root);
+    }
+
     free(root);
     if (extra == NULL) return cat;
     size_t len_cat = strlen(cat); 
