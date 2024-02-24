@@ -74,6 +74,8 @@ int asaru_copy_file(connection_t* connection, asaru_path_t* src, asaru_path_t* d
 
     afc_file_close(connection->client, iphone_fd);
     fclose(outfile);
+    free((void*) infilename);
+    free((void*) outfilename);
     return 0;
 error:
     perror("asaru copy");
