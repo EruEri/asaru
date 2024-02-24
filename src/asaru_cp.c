@@ -88,7 +88,8 @@ afc_error_t asaru_copy_recursive(connection_t* connection, asaru_path_t* source,
     asaru_fkind_t stats = asaru_kind_of_path(connection, source_str);
     struct stat outfile_stats;
     int status = stat(destination_str, &outfile_stats);
-    if (status != 0) {
+    puts(destination_str);
+    if (status != 0 && errno != ENOENT) {
         perror(NULL);
         goto end;
     }
@@ -121,8 +122,9 @@ afc_error_t asaru_copy_recursive(connection_t* connection, asaru_path_t* source,
                 const char* filename = asaru_path_last_component_ref(source);
                 asaru_path_push(destination, filename);
                 asaru_copy_file(connection, source, destination);
+                asaru_path_pop(destination);
             } else {
-
+                asaru_copy_file(connection, source, destination);
             }
             goto end;
         }
@@ -207,8 +209,8 @@ afc_error_t asaru_cp(connection_t* connection, asaru_path_t* apth, args_t* args)
     };
 
     asaru_path_t* source = asaru_path_clone(apth);
-    asaru_path_push(source, input);
     asaru_path_t* destination = asaru_path_create(false);
+    asaru_path_push(source, input);
     asaru_path_push(destination, output);
     if (recursive) {
         asaru_copy_recursive(connection, source, destination);
